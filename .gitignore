@@ -1,0 +1,9 @@
+build.properties
+default.properties
+obj
+bin
+.git
+release
+docs
+graphics
+libs

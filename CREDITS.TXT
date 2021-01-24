@@ -2,6 +2,7 @@ Quake2 on Android
 
 Credits :
 
+https://github.com/austgl for publishing all the sources that I created this fork from
 Julien Eyriès for initial port, 3D, audio
 Guillaume Legris for adding controls
 Lukács Péter for the icon

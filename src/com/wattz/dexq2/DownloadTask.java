@@ -1,4 +1,4 @@
-package com.jeyries.quake2;
+package com.wattz.dexq2;
 
 import java.io.BufferedInputStream;
 import java.io.File;

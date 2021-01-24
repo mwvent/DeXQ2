@@ -36,7 +36,7 @@
 
 
 jstring EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2GetVersion( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2GetVersion( JNIEnv* env,
                                                   jobject thiz )
 {
     return (*env)->NewStringUTF(env, QUAKE2_JNI_VERSION);
@@ -53,7 +53,7 @@ extern void Qcommon_Frame(int msec);
 
 
 jint EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2Init( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2Init( JNIEnv* env,
                                                   jobject thiz )
 {
 	int argc =1; char *argv[] ={ "quake2" };
@@ -135,7 +135,7 @@ Java_com_jeyries_quake2_Quake2_Quake2Init( JNIEnv* env,
 
 
 jint EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2Frame( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2Frame( JNIEnv* env,
                                                   jobject thiz )
 {
 
@@ -169,7 +169,7 @@ Java_com_jeyries_quake2_Quake2_Quake2Frame( JNIEnv* env,
 //Cvar_Set ("paused", "1")
 
 jint EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2Paused( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2Paused( JNIEnv* env,
                                                   jobject thiz )
 {
     // from qcommon.h
@@ -203,7 +203,7 @@ typedef struct cvar_s
 
 
 jint EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2Quit( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2Quit( JNIEnv* env,
                                                   jobject thiz )
 {
 	//Sys_Quit();
@@ -216,7 +216,7 @@ Java_com_jeyries_quake2_Quake2_Quake2Quit( JNIEnv* env,
 
 
 jint EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2Test( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2Test( JNIEnv* env,
                                                   jobject thiz )
 {
 	return 0;
@@ -225,7 +225,7 @@ Java_com_jeyries_quake2_Quake2_Quake2Test( JNIEnv* env,
 
 
 jint EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2GetDisableScreen( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2GetDisableScreen( JNIEnv* env,
                                                   jobject thiz )
 {
 	extern int quake2_jni_disable_screen();
@@ -234,7 +234,7 @@ Java_com_jeyries_quake2_Quake2_Quake2GetDisableScreen( JNIEnv* env,
 
 
 jint EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2GetVibration( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2GetVibration( JNIEnv* env,
                                                   jobject thiz )
 {
 	extern int quake2_jni_get_vibration();
@@ -248,14 +248,14 @@ static int height;
 
 
 void EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2SetWidth( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2SetWidth( JNIEnv* env,
                                                   jobject thiz, jint value )
 {
 	width = value;
 }
 
 void EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2SetHeight( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2SetHeight( JNIEnv* env,
                                                   jobject thiz, jint value )
 {
 	height = value;
@@ -273,7 +273,7 @@ int quake2_jni_get_height()
 
 
 void EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2SetOverlay( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2SetOverlay( JNIEnv* env,
                                                   jobject thiz, jint value )
 {
 	extern void quake2_jni_set_overlay( int value );
@@ -289,7 +289,7 @@ Java_com_jeyries_quake2_Quake2_Quake2SetOverlay( JNIEnv* env,
 
 
 void EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2KeyEvent(JNIEnv* env, jobject obj,
+Java_com_wattz_dexq2_Quake2_Quake2KeyEvent(JNIEnv* env, jobject obj,
 			jint key, jint down) {
 
 	quake2_jni_key_event( key, down );
@@ -301,7 +301,7 @@ Java_com_jeyries_quake2_Quake2_Quake2KeyEvent(JNIEnv* env, jobject obj,
 
 
 void EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2MoveEvent(JNIEnv* env, jobject obj,
+Java_com_wattz_dexq2_Quake2_Quake2MoveEvent(JNIEnv* env, jobject obj,
 			jint mode,
 			jint forwardmove, jint sidemove, jint upmove,
 			jfloat pitch, jfloat yaw, jfloat roll ) {
@@ -330,7 +330,7 @@ Java_com_jeyries_quake2_Quake2_Quake2MoveEvent(JNIEnv* env, jobject obj,
  *************************/
 
 jint EXPORT_ME
-Java_com_jeyries_quake2_Quake2_Quake2PaintAudio( JNIEnv* env,
+Java_com_wattz_dexq2_Quake2_Quake2PaintAudio( JNIEnv* env,
                                                   jobject thiz, jobject buf )
 {
 	extern int paint_audio (void *unused, void * stream, int len);
@@ -349,30 +349,3 @@ Java_com_jeyries_quake2_Quake2_Quake2PaintAudio( JNIEnv* env,
 }
 
 
-
-/*
-$ ls -l /proc/asound
-lrwxrwxrwx root     root              2009-08-30 11:51 msmaudio -> card0
-dr-xr-xr-x root     root              2009-08-30 11:51 card0
--r--r--r-- root     root            0 2009-08-30 11:51 pcm
--r--r--r-- root     root            0 2009-08-30 11:51 timers
--r--r--r-- root     root            0 2009-08-30 11:51 cards
--r--r--r-- root     root            0 2009-08-30 11:51 devices
--r--r--r-- root     root            0 2009-08-30 11:51 version
-$ cat /proc/asound/cards
- 0 [msmaudio       ]: MSM-CARD - msm-audio
-                      msm-audio (MSM-CARD)
-$ cat /proc/asound/pcm
-00-00: ASOC ASOC-PCM-0 :  : playback 1 : capture 1
-$ cat /proc/asound/devices
-  0: [ 0]   : control
- 16: [ 0- 0]: digital audio playback
- 24: [ 0- 0]: digital audio capture
- 33:        : timer
-$ cat /proc/asound/version
-Advanced Linux Sound Architecture Driver Version 1.0.17.
-
-target StaticLib: libasound (out/target/product/generic/obj/STATIC_LIBRARIES/libasound_intermediates/libasound.a)
-
-
-*/

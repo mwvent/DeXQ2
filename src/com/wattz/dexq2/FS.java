@@ -23,11 +23,7 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  */
-package com.jeyries.quake2;
-
-
-//import jake2.game.cvar_t;
-
+package com.wattz.dexq2;
 
 import java.io.*;
 import java.nio.ByteBuffer;

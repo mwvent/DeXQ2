@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jeyries.quake2;
+package com.wattz.dexq2;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -29,6 +29,8 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Integer;
+import java.lang.String;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -80,6 +82,9 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
+import android.widget.EditText;
+import android.text.TextWatcher;
+import android.text.Editable;
 
 public class Quake2 extends Activity 
 	implements SensorEventListener, Handler.Callback
@@ -96,12 +101,13 @@ public class Quake2 extends Activity
 	private boolean please_exit = false;
 	
 	// android settings - saved as preferences
-	private boolean debug = false,	
+	private boolean debug = true,	
 					invert_roll = false,
 					enable_audio = true,
 					enable_sensor = true,
 					enable_vibrator = false,
 					enable_ecomode = false;
+	private int     mouse_sensitvity = 4;
 	
     private long tstart;
     private int timelimit = 0; //4*60000;
@@ -186,10 +192,18 @@ public class Quake2 extends Activity
         	             @Override  
         	             public void onClick(View v) {  
         	            	 start_quake2();     	            	 
-        	            	 
         	             }
 					
-        });  
+        });
+		
+		Button button_show_settings = (Button)this.findViewById(R.id.button_show_settings);
+        button_show_settings.setOnClickListener( new OnClickListener() {  
+				@Override  
+				public void onClick(View v) {  
+					show_settings();     	            	 
+				}
+
+			});
         
     }
     
@@ -223,6 +237,23 @@ public class Quake2 extends Activity
     		}
 
     	};
+		
+		TextWatcher textListener = new TextWatcher() {
+			public void afterTextChanged(Editable s) {} 
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {} 
+			public void onTextChanged(CharSequence s, int start, int before, int count) { 
+				EditText textbox_mouse_sensitivity = ((EditText)findViewById(R.id.textbox_mouse_sensitivity));
+				String pre_mouse_sensitvity = textbox_mouse_sensitivity.getText().toString();
+				if( pre_mouse_sensitvity.isEmpty()) {
+					mouse_sensitvity = 0;
+				} else {
+					mouse_sensitvity =  Integer.parseInt(textbox_mouse_sensitivity.getText().toString());
+					save_preferences();
+				}
+				
+			}
+				
+		};
 
     	CheckBox checkbox_debug = ((CheckBox)findViewById(R.id.checkbox_debug));
     	checkbox_debug.setChecked(debug);
@@ -239,13 +270,14 @@ public class Quake2 extends Activity
     	CheckBox checkbox_vibrator = ((CheckBox)findViewById(R.id.checkbox_vibrator));
     	checkbox_vibrator.setChecked(enable_vibrator);
     	checkbox_vibrator.setOnClickListener(listener);
-
+		
     	CheckBox checkbox_ecomode = ((CheckBox)findViewById(R.id.checkbox_ecomode));
     	checkbox_ecomode.setChecked(enable_ecomode);
     	checkbox_ecomode.setOnClickListener(listener);
 
-
-
+		EditText textbox_mouse_sensitivity = ((EditText)findViewById(R.id.textbox_mouse_sensitivity));
+		textbox_mouse_sensitivity.setText(String.valueOf(mouse_sensitvity));
+		textbox_mouse_sensitivity.addTextChangedListener( textListener );
     }
 
     
@@ -260,8 +292,9 @@ public class Quake2 extends Activity
     	enable_audio = settings.getBoolean("enable_audio", enable_audio );
     	enable_sensor = settings.getBoolean("enable_sensor", enable_sensor);
     	enable_vibrator = settings.getBoolean("enable_vibrator", enable_vibrator);
-    	enable_ecomode = settings.getBoolean("enable_ecomode", enable_ecomode);   
-
+    	enable_ecomode = settings.getBoolean("enable_ecomode", enable_ecomode);
+		mouse_sensitvity = settings.getInt("mouse_sensitvity", mouse_sensitvity);
+		if(mouse_sensitvity == 0) { mouse_sensitvity = 1; }
     }
 
     public void save_preferences(){
@@ -277,6 +310,8 @@ public class Quake2 extends Activity
     	editor.putBoolean("enable_sensor", enable_sensor);
     	editor.putBoolean("enable_vibrator", enable_vibrator);
     	editor.putBoolean("enable_ecomode", enable_ecomode); 
+		if(mouse_sensitvity == 0) { mouse_sensitvity = 1; }
+		editor.putInt("mouse_sensitvity", mouse_sensitvity);
 
     	// Don't forget to commit your edits!!!
     	editor.commit();
@@ -596,10 +631,9 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
                 num_config);
         
         
-        if (debug)
-	        for(EGLConfig config : configs) {
-	        	Log.i( "Quake2.java", "found EGL config : " + printConfig(egl,display,config));       	
-	        }
+	    for(EGLConfig config : configs) {
+	        Log.i( "Quake2.java", "found EGL config : " + printConfig(egl,display,config));       	
+	    }
         
         
         // best choice : select first config
@@ -667,7 +701,7 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 
     @Override
     protected void onPause() {
-    	
+    	/*
     	Log.i( "Quake2.java", "onPause" );
          
         super.onPause();
@@ -698,6 +732,7 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
       	
         	
     	}
+		*/
     }
 
     @Override
@@ -709,6 +744,7 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
         if (mRenderer.state!=mRenderer.STATE_RESET){
         	mGLSurfaceView.onResume();
         }
+		
     }
 
     @Override
@@ -918,9 +954,38 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 
     class QuakeView extends GLSurfaceView {
     	
-    	  /*--------------------
+    	 /*--------------------
          * Event handling
          *--------------------*/
+		 
+		/**
+		 * mwvent - respond to captured mouse movements
+		 */
+		@Override
+		public boolean onCapturedPointerEvent(MotionEvent motionEvent) {
+			// get the x,y accel values always relative to 0
+			float x = motionEvent.getX() ;
+			float y = motionEvent.getY() ;
+			// any buttons down?
+			int leftButton = motionEvent.getButtonState() & motionEvent.BUTTON_PRIMARY;
+			postKeyEvent( K_MOUSE1, leftButton );
+		
+			// release pointer if game paused
+			boolean _paused = Quake2Paused() != 0;
+			if ( _paused ) {
+				this.releasePointerCapture();
+				return false;
+			}
+			
+			synchronized (sensorEvents) {
+				touch_state = 2;
+				touch_x = x / (this.getWidth() / mouse_sensitvity);
+				touch_y = y / (this.getHeight() / mouse_sensitvity);    	
+			}
+			
+			return true;
+		}
+		
 
         /**
          * Key states (read by the native side). DO NOT rename without modifying the
@@ -1132,7 +1197,7 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
     		
         	public void release( float x, float y ){
         		
-        			
+        		
         		long downtime = SystemClock.uptimeMillis() - this.timestamp;
         		
         		if (downtime < 1000){
@@ -1350,9 +1415,13 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
         
         
         
-        
         public boolean onTouchEvent(final MotionEvent e) {
-        	
+			// mwvent - if a mouse is used to create touch event capture it
+			// captured input will subsequentley be handled by onCapturedPointerEvent
+			int tooltype = e.getToolType(0);
+			if( tooltype == e.TOOL_TYPE_MOUSE ) {
+				this.requestPointerCapture();
+			}
             //Log.i("Quake2.java", "onTouchEvent:" +  e.getX() + " " + e.getY());
             
         	float x = e.getX() / this.getWidth();
@@ -1369,7 +1438,7 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
             	current_button = check_buttons(buttons,x,y);           	
             	if ( current_button!=null )            		
             		current_button.press(x, y);
-            	
+
                 break;
                 
             case MotionEvent.ACTION_MOVE:
@@ -2082,7 +2151,6 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 	
 	public void moveUpdate( int msec ) {
 		
-		
 		int mode = 2; // set pitch
 		int forwardmove = 0;
 		float qyaw = 0.0f; // delta
@@ -2118,6 +2186,25 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 				//touch_yref = touch_y;
 	
 			} 
+			
+			// mwvent - get info from captured mouse
+			if (touch_state==2){
+
+				// compute roll from touchscreen X
+				tx = 180.0f * touch_x;
+				touch_xref = touch_x; // delta
+
+				// compute pitch from touchscreen Y
+				ty = 180.0f * touch_y;
+				touch_yref = touch_y;
+				
+				// set to delta move and reset
+				// the pitch and yaw for the next iteration
+				mode = 1;
+				
+				touch_x=0;
+				touch_y=0;
+			} 
 
 			/*
 			if (debug)
@@ -2146,7 +2233,7 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 			switch ( move_state ){
 			
 			case MOVE_NOTHING:
-				if ( touch_state == 1)
+				if ( touch_state == 1 || touch_state == 2 )
 					move_state = MOVE_VIEW;
 				else if ( p != 0  )
 					move_state = MOVE_FORWARDMOVE;
@@ -2156,17 +2243,16 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 				break;
 				
 			case MOVE_FORWARDMOVE:
-				if ( touch_state == 1)
+				if ( touch_state == 1 || touch_state == 2 )
 					move_state = MOVE_VIEW;
 				else if ( p == 0 )
 					move_state = MOVE_NOTHING;
 				else if ( Math.abs(r) > 5.0f ) // urgent yaw
 					move_state = MOVE_YAW;
-				
 				break;
 				
 			case MOVE_YAW:
-				if ( touch_state == 1)
+				if ( touch_state == 1 || touch_state == 2 )
 					move_state = MOVE_VIEW;
 				else if ( r == 0 )
 					move_state = MOVE_NOTHING;

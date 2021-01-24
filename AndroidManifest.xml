@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.jeyries.quake2" android:versionCode="21" android:versionName="1.91">
+	package="com.wattz.dexq2" android:versionCode="28" android:versionName="2.0mw">
     
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="26" />
     
     <application android:icon="@drawable/icon" android:label="Quake2">
     
@@ -10,7 +10,6 @@
                       android:normalScreens="true" 
                       android:largeScreens="true"  
                       android:anyDensity="true"  />
-
 
         <activity android:name=".Quake2"
                   android:label="Quake2" 
@@ -29,6 +28,4 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE" /> 
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
-
-   
 </manifest> 

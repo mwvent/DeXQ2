@@ -1,9 +1,15 @@
-changelist 1.91:
-ARMV7 support (FPU)
-minimum SDK is now Android 1.6
-support any screen density
-support multiple screen size
-tested with HTC Desire HD (Android 2.2) and Samsung Galaxy (Android 1.6)
+changelist 2.00mw :
+- New fork from https://github.com/austgl/quake2android to https://github.com/mwvent/quake2android
+- Minimum SDK is now Android 8 / API level 26 for pointer grab support
+- Fixed unable to access settings from main screen ( old method was to use the dedicated menu button no longer used on android )
+- Added pointer grab and grabbed pointer movement for playing with a mouse like pc
+
+changelist 1.91 :
+- ARMV7 support (FPU)
+- minimum SDK is now Android 1.6
+- support any screen density
+- support multiple screen size
+- tested with HTC Desire HD (Android 2.2) and Samsung Galaxy (Android 1.6)
 
 changelist 1.81 :
 - switched to Ant build system

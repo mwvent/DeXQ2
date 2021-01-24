@@ -43,6 +43,14 @@ android:orientation="vertical"
             android:textSize="14sp"
             android:padding="10dp"
             />
+		
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Update to support mouse capture and control by Matthew Watts 2021"
+				android:textSize="14sp"
+				android:padding="10dp"
+            />
             
             <TextView
             android:layout_width="wrap_content"
@@ -69,6 +77,14 @@ android:orientation="vertical"
             android:layout_height="wrap_content"
             android:text="Start Quake2"
             android:padding="20dp"
+            />
+		
+			<Button
+				android:id="@+id/button_show_settings"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="Settings"
+				android:padding="20dp"
             />
         
             

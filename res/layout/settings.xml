@@ -72,6 +72,22 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:text="eco mode : framerate limitation saves your battery"
             android:checked="true"
             />
+		
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Mouse sensitivity"
+				android:textSize="14sp"
+				android:padding="10dp"
+            />
+		
+			<EditText android:id="@+id/textbox_mouse_sensitivity" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:ems="10"
+				android:inputType="number"
+			/>
 
         </LinearLayout>
                 
