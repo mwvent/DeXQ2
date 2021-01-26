@@ -972,25 +972,34 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 			float x = motionEvent.getX() ;
 			float y = motionEvent.getY() ;
 			// any buttons down?
-			int leftButton = motionEvent.getButtonState() & motionEvent.BUTTON_PRIMARY;
-			postKeyEvent( K_MOUSE1, leftButton );
-		
-			// release pointer if game paused
-			boolean _paused = Quake2Paused() != 0;
-			if ( _paused ) {
-				this.releasePointerCapture();
-				return false;
-			}
+			sendMouseButtonsFromMotionEvent(motionEvent);
 			
 			synchronized (sensorEvents) {
 				touch_state = 2;
-				touch_x = x / (this.getWidth() / mouse_sensitvity);
-				touch_y = y / (this.getHeight() / mouse_sensitvity);    	
+				touch_x += x / (this.getWidth() / mouse_sensitvity);
+				touch_y += y / (this.getHeight() / mouse_sensitvity);    	
 			}
 			
 			return true;
 		}
 		
+		/** 
+			mwvent - Send mouse button states
+		**/
+		public void sendMouseButtonsFromMotionEvent(MotionEvent motionEvent) {
+			Log.i("Mouse","AX"+motionEvent.getAxisValue(motionEvent.AXIS_VSCROLL));
+			int up = motionEvent.getAxisValue(motionEvent.AXIS_VSCROLL) > 0.0f ? 1:0;
+			int down = motionEvent.getAxisValue(motionEvent.AXIS_VSCROLL) < 0.0f ? 1:0;		
+			postKeyEvent( K_MWHEELUP, up );
+			postKeyEvent( K_MWHEELDOWN, down );
+			if(motionEvent.getToolType(0) == motionEvent.TOOL_TYPE_MOUSE) {
+				postKeyEvent( K_MOUSE1, motionEvent.getButtonState() & motionEvent.BUTTON_PRIMARY );
+				postKeyEvent( K_MOUSE2, motionEvent.getButtonState() & motionEvent.BUTTON_SECONDARY );
+				postKeyEvent( K_MOUSE3, motionEvent.getButtonState() & motionEvent.BUTTON_TERTIARY );
+				postKeyEvent( K_MOUSE4, motionEvent.getButtonState() & motionEvent.BUTTON_BACK );
+				postKeyEvent( K_MOUSE5, motionEvent.getButtonState() & motionEvent.BUTTON_FORWARD );
+			}
+		}
 
         /**
          * Key states (read by the native side). DO NOT rename without modifying the
@@ -1004,7 +1013,7 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
          *  Key codes understood by the Quake engine.
          */
         
-    
+     
 
         static final int K_TAB = 9, K_ENTER = 13, K_ESCAPE = 27, K_SPACE = 32, K_BACKSPACE = 127, K_UPARROW = 128, K_DOWNARROW = 129,
                 K_LEFTARROW = 130, K_RIGHTARROW = 131, K_ALT = 132, K_CTRL = 133, K_SHIFT = 134, K_F1 = 135, K_F2 = 136, K_F3 = 137,
@@ -1420,14 +1429,8 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
         
         
         
-        public boolean onTouchEvent(final MotionEvent e) {
-			// mwvent - if a mouse is used to create touch event capture it
-			// captured input will subsequentley be handled by onCapturedPointerEvent
-			int tooltype = e.getToolType(0);
-			if( tooltype == e.TOOL_TYPE_MOUSE ) {
-				this.requestPointerCapture();
-			}
-            //Log.i("Quake2.java", "onTouchEvent:" +  e.getX() + " " + e.getY());
+        public boolean onTouchEvent(final MotionEvent e) { 
+            //Log.i("Quake2.java", "onTouchEvent:" +  e.getX() + " " + e.getY()); 
             
         	float x = e.getX() / this.getWidth();
         	float y = e.getY() / this.getHeight();
@@ -1650,6 +1653,8 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
     private long tprev = 0;
     private boolean paused = false;
     
+	private int prev_pointer_grab_state = 0;
+	
     //// new Renderer interface
 	public void onDrawFrame(GL10 gl) {
 		
@@ -1789,7 +1794,28 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 				SystemClock.sleep( tsleep );
         }
         
-
+		// Attempt to grab/release pointer if Quake2 binary is in a valid state
+		// No checks for mouse presence or window focus are neccessary 
+		// as the Android functions handle this
+		int new_pointer_grab_state = Quake2PointerGrabState();
+		if( new_pointer_grab_state == 1) {
+			mGLSurfaceView.requestPointerCapture();
+			if( prev_pointer_grab_state != 1 ) {
+				synchronized (sensorEvents) {
+					touch_state = 2;
+					touch_x = 0;
+					touch_y = 0;    	
+				}
+			}
+		} else {
+			mGLSurfaceView.releasePointerCapture();
+			synchronized (sensorEvents) {
+				touch_state = 1;  	
+				touch_x = 0;
+				touch_y = 0;    	
+			}
+		}
+		prev_pointer_grab_state = new_pointer_grab_state;
 
         
     }
@@ -1936,6 +1962,8 @@ I/Quake2.java(11435): config= EGLConfig rgba=0008 depth=16 stencil=0 native=1 bu
 			float pitch, float yaw, float roll );
     
     private static native int Quake2Paused();
+	
+	private static native int Quake2PointerGrabState();
     
     
     /*----------------------------

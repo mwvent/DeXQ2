@@ -206,7 +206,10 @@ void RW_IN_Frame(void) {
     //__android_log_print(ANDROID_LOG_DEBUG, "KBD", "RW_IN_Frame\n");
 }
 
-void RW_IN_Activate(void) {
-    //__android_log_print(ANDROID_LOG_DEBUG, "KBD", "RW_IN_Activate\n");
+void RW_IN_Activate(qboolean active) {
+	if (active)
+    	IN_ActivateMouse();
+  	else
+    	IN_DeactivateMouse();
 }
 

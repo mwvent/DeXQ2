@@ -617,6 +617,9 @@ char *bindnames[][2] =
 
 int				keys_cursor;
 static int		bind_grab;
+int menu_is_bind_grabbed() {
+	return bind_grab;
+}
 
 static menuframework_s	s_keys_menu;
 static menuaction_s		s_keys_attack_action;

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0 
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -132,6 +132,28 @@ Java_com_wattz_dexq2_Quake2_Quake2Init( JNIEnv* env,
 
 	*/
 
+extern int menu_is_bind_grabbed();
+jint EXPORT_ME
+Java_com_wattz_dexq2_Quake2_Quake2PointerGrabState( JNIEnv* env, jobject thiz ) {
+	/* Dirty Hack - need to get static object bind_grab from client/menu.c
+	   requires modifcation of client/menu.c which I'd rather not do but there is no clean 
+	   way to get that value otherwise
+	   
+	   To mod the Q2 sources again if needed replace line
+	   static int		bind_grab;
+	   with
+	   int menu_is_bind_grabbed() {
+	       return bind_grab;
+	   }
+	*/
+	return pointer_grab_state || menu_is_bind_grabbed();
+}
+void IN_ActivateMouse() {
+	pointer_grab_state = 1;
+}
+void IN_DeactivateMouse() {
+	pointer_grab_state = 0; 
+}
 
 
 jint EXPORT_ME
