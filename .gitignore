@@ -7,3 +7,8 @@ release
 docs
 graphics
 libs
+.gradle
+.idea
+app/.cxx
+app/build
+local.properties
